@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        main{
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+        }
+        .card{
+            height:200px;
+            width:300px;
+            gap:2em;
+            margin:2px;
+            padding:10px;
+        }
+        .card1,.card2,.card3,.card4,.card5,.card6{
+            border:1px solid black;
+            gap:1em;
+            border-radius: 6px;
+            text-align: center;
+            align-content: center;
+            background-color: tomato;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="card card1" style="background-color:red;height:400px">1</div>
+        <div class="card card2">2</div>
+        <div class="card card3">3</div>
+        <div class="card card4">4</div>
+        <div class="card card5">5</div>
+        <div class="card card6">6</div>
+    </main>
+</body>
+</html>

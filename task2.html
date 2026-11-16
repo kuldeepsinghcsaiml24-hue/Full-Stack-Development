@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopKart - E-Commerce Product Listing</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+            color: #111827;
+        }
+        /* Custom scrollbar for filter drawer if needed */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .toast-slide {
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#F8FAFC] text-[#111827] antialiased">
+
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <header class="sticky top-0 z-30 bg-white border-b border-[#E5E7EB] px-4 lg:px-8 py-3.5 shadow-sm">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+            
+            <!-- Logo & Mobile Drawer Toggle -->
+            <div class="flex items-center gap-3">
+                <button id="mobile-filter-btn" class="lg:hidden p-2 rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-700" onclick="toggleMobileSidebar()" aria-label="Toggle Filters">
+                    <i data-lucide="sliders-horizontal" class="w-5 h-5"></i>
+                </button>
+                <a href="#" class="flex items-center gap-2 group">
+                    <div class="w-9 h-9 rounded-xl bg-[#2563EB] flex items-center justify-center text-white font-bold shadow-md shadow-blue-500/20 group-hover:bg-blue-700 transition-colors">
+                        <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-xl font-bold tracking-tight text-[#111827]">Shop<span class="text-[#2563EB]">Kart</span></span>
+                </a>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="flex-1 max-w-xl mx-4 hidden sm:block">
+                <div class="relative">
+                    <input 
+                        type="text" 
+                        id="search-input"
+                        placeholder="Search for products..." 
+                        oninput="handleSearch()"
+                        class="w-full bg-[#F8FAFC] border border-[#E5E7EB] rounded-xl pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] transition-all placeholder:text-gray-400"
+                    >
+                    <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                </div>
+            </div>
+
+            <!-- Actions (Cart & User) -->
+            <div class="flex items-center gap-2 sm:gap-4">
+                <button class="sm:hidden p-2 text-gray-600 rounded-lg hover:bg-gray-100" onclick="toggleMobileSearch()">
+                    <i data-lucide="search" class="w-5 h-5"></i>
+                </button>
+                
+                <button class="relative p-2 text-[#111827] hover:text-[#2563EB] hover:bg-blue-50 rounded-xl transition-all" aria-label="Cart">
+                    <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+                    <span id="cart-badge" class="absolute top-1 right-1 bg-[#2563EB] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border-2 border-white">0</span>
+                </button>
+
+                <div class="h-6 w-px bg-[#E5E7EB] hidden sm:block"></div>
+
+                <button class="flex items-center gap-2 p-1.5 rounded-xl hover:bg-gray-100 transition-colors" aria-label="User Account">
+                    <div class="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700">
+                        <i data-lucide="user" class="w-4 h-4"></i>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Search Dropdown -->
+        <div id="mobile-search-bar" class="hidden mt-3 sm:hidden pt-2 border-t border-gray-100">
+            <div class="relative">
+                <input 
+                    type="text" 
+                    id="mobile-search-input"
+                    placeholder="Search for products..." 
+                    oninput="handleSearch(true)"
+                    class="w-full bg-[#F8FAFC] border border-[#E5E7EB] rounded-xl pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563EB]"
+                >
+                <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto w-full px-4 lg:px-8 pt-4 pb-2">
+        <nav class="flex text-[13px] text-[#687280] font-normal" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-2">
+                <li class="inline-flex items-center">
+                    <a href="#" class="hover:text-[#2563EB] transition-colors">Electronics</a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <i data-lucide="chevron-right" class="w-3.5 h-3.5 mx-1 text-gray-400"></i>
+                        <span class="text-[#111827] font-medium">Laptops</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+    </div>
+
+    <main class="max-w-7xl mx-auto w-full px-4 lg:px-8 py-4 flex-1">
+        <div class="flex flex-col lg:flex-row gap-6">
+
+            <aside id="sidebar-container" class="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm lg:backdrop-blur-none lg:static lg:z-0 lg:bg-transparent hidden lg:block transition-all">
+                <div class="h-full w-[280px] lg:w-[240px] bg-white lg:bg-transparent p-5 lg:p-0 overflow-y-auto lg:overflow-visible ml-auto lg:ml-0 flex flex-col justify-between shadow-xl lg:shadow-none">
+                    
+                    <div class="space-y-6">
+                        <!-- Mobile Header -->
+                        <div class="flex items-center justify-between pb-3 border-b border-gray-200 lg:hidden">
+                            <h3 class="font-bold text-lg text-[#111827]">Filters</h3>
+                            <button onclick="toggleMobileSidebar()" class="p-1 rounded-lg text-gray-500 hover:bg-gray-100">
+                                <i data-lucide="x" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+
+                        <!-- Sidebar Heading for Desktop -->
+                        <div class="hidden lg:flex items-center justify-between pb-1">
+                            <h2 class="font-bold text-base text-[#111827]">Filters</h2>
+                            <button onclick="resetFilters()" class="text-xs text-[#2563EB] hover:underline font-medium">Reset All</button>
+                        </div>
+
+                        <!-- Category Filter -->
+                        <div class="bg-white p-4 lg:p-4 rounded-2xl border border-[#E5E7EB] shadow-sm">
+                            <h3 class="text-xs font-semibold uppercase tracking-wider text-[#111827] mb-3">Category</h3>
+                            <div class="space-y-2.5">
+                                <label class="flex items-center text-sm text-[#687280] hover:text-[#111827] cursor-pointer">
+                                    <input type="checkbox" name="category" value="Laptops" checked onchange="applyFilters()" class="w-4 h-4 rounded text-[#2563EB] focus:ring-[#2563EB] border-gray-300">
+                                    <span class="ml-2.5">Laptops</span>
+                                </label>
+                                <label class="flex items-center text-sm text-[#687280] hover:text-[#111827] cursor-pointer">
+                                    <input type="checkbox" name="category" value="Desktops" onchange="applyFilters()" class="w-4 h-4 rounded text-[#2563EB] focus:ring-[#2563EB] border-gray-300">
+                                    <span class="ml-2.5">Desktops</span>
+                                </label>
+                                <label class="flex items-center text-sm text-[#687280] hover:text-[#111827] cursor-pointer">
+                                    <input type="checkbox" name="category" value="Tablets" onchange="applyFilters()" class="w-4 h-4 rounded text-[#2563EB] focus:ring-[#2563EB] border-gray-300">
+                                    <span class="ml-2.5">Tablets</span>
+                                </label>
+                                <label class="flex items-center text-sm text-[#687280] hover:text-[#111827] cursor-pointer">
+                                    <input type="checkbox" name="category" value="Accessories" onchange="applyFilters()" class="w-4 h-4 rounded text-[#2563EB] focus:ring-[#2563EB] border-gray-300">
+                                    <span class="ml-2.5">Accessories</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Price Range Filter -->
+                        <div class="bg-white p-4 lg:p-4 rounded-2xl border border-[#E5E7EB] shadow-sm">
+                            <h3 class="text-xs font-semibold uppercase tracking-wider text-[#111827] mb-3">Price Range</h3>
+                            <div class="space-y-2.5">
+                                <label class="flex items-center text-sm text-[#687280] hover:text-[#111827] cursor-pointer">
+                                    <input type="checkbox" name="price" value="0-25000" onchange="applyFilters()" class="w-4 h-4 rounded text-[#2563EB] focus:ring-[#2563EB] border-gray-300">
+                                    <span class="ml-2.5">₹0 - ₹25,000</span>
+                                </label>
+                                <label class="flex items-center text-sm text-[#687280] hover:text-[#111827] cursor-pointer">
+                                    <input type="checkbox" name="price" value="25000-50000" onchange="applyFilters()" class="w-4 h-4 rounded text-[#2563EB] focus:ring-[#2563EB] border-gray-300">
+                                    <span class="ml-2.5">₹25,000 - ₹50,000</span>
+                                </label>
+                                <label class="flex items-center text-sm text-[#687280] hover:text-[#111827] cursor-pointer">
+                                    <input type="checkbox" name="price" value="50000-75000" onchange="applyFilters()" class="w-4 h-4 rounded text-[#2563EB] focus:ring-[#2563EB] border-gray-300">
+                                    <span class="ml-2.5">₹50,000 - ₹75,000</span>
+                                </label>
+                                <label class="flex items-center text-sm text-[#687280] hover:text-[#111827] cursor-pointer">
+                                    <input type="checkbox" name="price" value="75000-plus" onchange="applyFilters()" class="w-4 h-4 rounded text-[#2563EB] focus:ring-[#2563EB] border-gray-300">
+                                    <span class="ml-2.5">₹75,000+</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Brand Filter -->
+                        <div class="bg-white p-4 lg:p-4 rounded-2xl border border-[#E5E7EB] shadow-sm">
+                            <h3 class="text-xs font-semibold uppercase tracking-wider text-[#111827] mb-3">Brand</h3>
+                            <div class="space-y-2.5">
+                                <label class="flex items-center text-sm text-[#687280] hover:text-[#111827] cursor-pointer">
+                                    <input type="checkbox" name="brand" value="Dell" onchange="applyFilters()" class="w-4 h-4 rounded text-[#2563EB] focus:ring-[#2563EB] border-gray-300">
+                                    <span class="ml-2.5">Dell</span>
+                                </label>
+                                <label class="flex items-center text-sm text-[#687280] hover:text-[#111827] cursor-pointer">
+                                    <input type="checkbox" name="brand" value="HP" onchange="applyFilters()" class="w-4 h-4 rounded text-[#2563EB] focus:ring-[#2563EB] border-gray-300">
+                                    <span class="ml-2.5">HP</span>
+                                </label>
+                                <label class="flex items-center text-sm text-[#687280] hover:text-[#111827] cursor-pointer">
+                                    <input type="checkbox" name="brand" value="Lenovo" onchange="applyFilters()" class="w-4 h-4 rounded text-[#2563EB] focus:ring-[#2563EB] border-gray-300">
+                                    <span class="ml-2.5">Lenovo</span>
+                                </label>
+                                <label class="flex items-center text-sm text-[#687280] hover:text-[#111827] cursor-pointer">
+                                    <input type="checkbox" name="brand" value="Apple" onchange="applyFilters()" class="w-4 h-4 rounded text-[#2563EB] focus:ring-[#2563EB] border-gray-300">
+                                    <span class="ml-2.5">Apple</span>
+                                </label>
+                                <label class="flex items-center text-sm text-[#687280] hover:text-[#111827] cursor-pointer">
+                                    <input type="checkbox" name="brand" value="ASUS" onchange="applyFilters()" class="w-4 h-4 rounded text-[#2563EB] focus:ring-[#2563EB] border-gray-300">
+                                    <span class="ml-2.5">ASUS</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Apply Button -->
+                        <button onclick="applyFilters(); if(window.innerWidth < 1024) toggleMobileSidebar();" class="w-full bg-[#2563EB] hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-xl shadow-md shadow-blue-500/10 transition-colors flex items-center justify-center gap-2">
+                            <span>Apply Filters</span>
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <section class="flex-1 min-w-0">
+                
+                <!-- Results Header & Sort Options Bar -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-[#E5E7EB] shadow-sm mb-6">
+                    <div class="text-sm font-medium text-[#687280]">
+                        <span id="results-count" class="text-[#111827] font-semibold">Showing 6 results</span>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <label for="sort-select" class="text-xs font-semibold text-[#687280] uppercase tracking-wider whitespace-nowrap">Sort by:</label>
+                        <select id="sort-select" onchange="handleSort()" class="bg-[#F8FAFC] border border-[#E5E7EB] text-[#111827] text-sm rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] transition-all font-medium cursor-pointer">
+                            <option value="popularity">Popularity</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="rating">Rating: High to Low</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Cards will be populated dynamically via JavaScript -->
+                </div>
+
+                <!-- Empty State -->
+                <div id="empty-state" class="hidden flex-col items-center justify-center py-16 px-4 bg-white rounded-2xl border border-[#E5E7EB] text-center">
+                    <div class="w-16 h-16 bg-blue-50 text-[#2563EB] rounded-full flex items-center justify-center mb-4">
+                        <i data-lucide="package-search" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-[#111827]">No products found</h3>
+                    <p class="text-sm text-[#687280] mt-1 max-w-sm">We couldn't find any products matching your current filters or search criteria.</p>
+                    <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-[#2563EB] text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors">
+                        Clear Filters
+                    </button>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        // Sample Product Database
+        const productsData = [
+            {
+                id: 1,
+                name: "Dell Inspiron 15",
+                brand: "Dell",
+                category: "Laptops",
+                price: 45990,
+                oldPrice: 68990,
+                rating: 4.5,
+                reviewsCount: "1.2k",
+                popularity: 95,
+                badge: "SALE",
+                badgeType: "sale",
+                imageSvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" class="w-full h-full object-contain p-4">
+                    <rect x="80" y="50" width="240" height="150" rx="12" fill="#1E293B" stroke="#475569" stroke-width="4"/>
+                    <rect x="90" y="60" width="220" height="130" rx="6" fill="#0F172A"/>
+                    <path d="M110 90 L290 160 M290 90 L110 160" stroke="#38BDF8" stroke-width="2" opacity="0.3"/>
+                    <path d="M40 210 L360 210 L380 230 C380 235 375 240 370 240 L30 240 C25 240 20 235 20 230 Z" fill="#94A3B8"/>
+                    <rect x="170" y="213" width="60" height="4" rx="2" fill="#64748B"/>
+                </svg>`
+            },
+            {
+                id: 2,
+                name: "HP Pavilion",
+                brand: "HP",
+                category: "Laptops",
+                price: 52990,
+                oldPrice: 69999,
+                rating: 4.3,
+                reviewsCount: "882",
+                popularity: 88,
+                badge: "NEW",
+                badgeType: "new",
+                imageSvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" class="w-full h-full object-contain p-4">
+                    <rect x="80" y="50" width="240" height="150" rx="10" fill="#0F172A" stroke="#334155" stroke-width="4"/>
+                    <rect x="90" y="60" width="220" height="130" rx="4" fill="#1E293B"/>
+                    <circle cx="200" cy="125" r="35" fill="#0284C7" opacity="0.2"/>
+                    <path d="M40 210 L360 210 L380 230 C380 235 375 240 370 240 L30 240 C25 240 20 235 20 230 Z" fill="#CBD5E1"/>
+                    <rect x="160" y="213" width="80" height="4" rx="2" fill="#94A3B8"/>
+                </svg>`
+            },
+            {
+                id: 3,
+                name: "Lenovo IdeaPad",
+                brand: "Lenovo",
+                category: "Laptops",
+                price: 38990,
+                oldPrice: null,
+                rating: 4.2,
+                reviewsCount: "654",
+                popularity: 80,
+                badge: null,
+                badgeType: null,
+                imageSvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" class="w-full h-full object-contain p-4">
+                    <rect x="80" y="50" width="240" height="150" rx="10" fill="#18181B" stroke="#3F3F46" stroke-width="4"/>
+                    <rect x="90" y="60" width="220" height="130" rx="4" fill="#09090B"/>
+                    <rect x="130" y="90" width="140" height="70" rx="8" fill="#6366F1" opacity="0.2"/>
+                    <path d="M40 210 L360 210 L380 230 C380 235 375 240 370 240 L30 240 C25 240 20 235 20 230 Z" fill="#A1A1AA"/>
+                    <rect x="175" y="213" width="50" height="4" rx="2" fill="#71717A"/>
+                </svg>`
+            },
+            {
+                id: 4,
+                name: "MacBook Air M2",
+                brand: "Apple",
+                category: "Laptops",
+                price: 93990,
+                oldPrice: 109900,
+                rating: 4.8,
+                reviewsCount: "2.3k",
+                popularity: 99,
+                badge: null,
+                badgeType: null,
+                imageSvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" class="w-full h-full object-contain p-4">
+                    <rect x="80" y="45" width="240" height="155" rx="14" fill="#334155" stroke="#64748B" stroke-width="3"/>
+                    <rect x="88" y="53" width="224" height="139" rx="8" fill="#0F172A"/>
+                    <path d="M120 70 Q200 180 280 80" stroke="#C084FC" stroke-width="3" fill="none"/>
+                    <path d="M40 210 L360 210 L380 228 C380 233 375 236 370 236 L30 236 C25 236 20 233 20 228 Z" fill="#E2E8F0"/>
+                    <rect x="180" y="212" width="40" height="3" rx="1.5" fill="#94A3B8"/>
+                </svg>`
+            },
+            {
+                id: 5,
+                name: "ASUS Vivobook",
+                brand: "ASUS",
+                category: "Laptops",
+                price: 41990,
+                oldPrice: 54990,
+                rating: 4.4,
+                reviewsCount: "733",
+                popularity: 85,
+                badge: "NEW",
+                badgeType: "new",
+                imageSvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" class="w-full h-full object-contain p-4">
+                    <rect x="80" y="50" width="240" height="150" rx="10" fill="#0F172A" stroke="#1E293B" stroke-width="4"/>
+                    <rect x="90" y="60" width="220" height="130" rx="4" fill="#1E1B4B"/>
+                    <polygon points="200,80 250,160 150,160" fill="#818CF8" opacity="0.3"/>
+                    <path d="M40 210 L360 210 L380 230 C380 235 375 240 370 240 L30 240 C25 240 20 235 20 230 Z" fill="#94A3B8"/>
+                    <rect x="170" y="213" width="60" height="4" rx="2" fill="#64748B"/>
+                </svg>`
+            },
+            {
+                id: 6,
+                name: "Dell XPS 13",
+                brand: "Dell",
+                category: "Laptops",
+                price: 89990,
+                oldPrice: null,
+                rating: 4.6,
+                reviewsCount: "1.4k",
+                popularity: 92,
+                badge: null,
+                badgeType: null,
+                imageSvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" class="w-full h-full object-contain p-4">
+                    <rect x="80" y="50" width="240" height="150" rx="12" fill="#111827" stroke="#374151" stroke-width="3"/>
+                    <rect x="86" y="56" width="228" height="138" rx="6" fill="#030712"/>
+                    <circle cx="200" cy="125" r="45" fill="#3B82F6" opacity="0.15"/>
+                    <path d="M40 210 L360 210 L380 230 C380 235 375 240 370 240 L30 240 C25 240 20 235 20 230 Z" fill="#D1D5DB"/>
+                    <rect x="175" y="213" width="50" height="4" rx="2" fill="#9CA3AF"/>
+                </svg>`
+            }
+        ];
+
+        // Global State Variable
+        let cartCount = 0;
+        let wishlistedItems = new Set();
+
+        // Format Currency Helper
+        function formatINR(amount) {
+            return '₹' + amount.toLocaleString('en-IN');
+        }
+
+        function renderProducts(products) {
+            const grid = document.getElementById('product-grid');
+            const emptyState = document.getElementById('empty-state');
+            const countLabel = document.getElementById('results-count');
+
+            countLabel.textContent = `Showing ${products.length} result${products.length === 1 ? '' : 's'}`;
+
+            if (products.length === 0) {
+                grid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            emptyState.classList.remove('flex');
+            grid.classList.remove('hidden');
+
+            grid.innerHTML = products.map(product => {
+                const isWishlisted = wishlistedItems.has(product.id);
+                
+                // Badge template
+                let badgeHTML = '';
+                if (product.badge === 'SALE') {
+                    badgeHTML = `<span class="bg-[#DC2626] text-white text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider shadow-sm">SALE</span>`;
+                } else if (product.badge === 'NEW') {
+                    badgeHTML = `<span class="bg-[#10B981] text-white text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider shadow-sm">NEW</span>`;
+                }
+
+                return `
+                <div class="bg-white rounded-2xl border border-[#E5E7EB] p-4 flex flex-col justify-between hover:shadow-lg transition-all duration-300 group">
+                    <div>
+                        <!-- Top Image Box + Heart Toggle + Badges -->
+                        <div class="relative w-full h-48 bg-[#F8FAFC] rounded-xl flex items-center justify-center overflow-hidden mb-4 group-hover:bg-slate-100/80 transition-colors">
+                            <div class="absolute top-3 left-3 z-10 flex gap-1.5">
+                                ${badgeHTML}
+                            </div>
+                            <button 
+                                onclick="toggleWishlist(${product.id})" 
+                                class="absolute top-3 right-3 z-10 p-1.5 rounded-full bg-white/80 backdrop-blur-sm text-gray-400 hover:text-red-500 hover:bg-white shadow-sm transition-all"
+                                aria-label="Add to Wishlist"
+                            >
+                                <i data-lucide="heart" class="w-4 h-4 ${isWishlisted ? 'fill-red-500 text-red-500' : ''}"></i>
+                            </button>
+
+                            <!-- Vector Graphic Product Image -->
+                            <div class="w-full h-full transform group-hover:scale-105 transition-transform duration-300 flex items-center justify-center">
+                                ${product.imageSvg}
+                            </div>
+                        </div>
+
+                        <!-- Brand & Title -->
+                        <div class="text-[13px] text-[#687280] mb-0.5">${product.brand}</div>
+                        <h3 class="text-base font-semibold text-[#111827] leading-snug mb-2 line-clamp-1 group-hover:text-[#2563EB] transition-colors">
+                            ${product.name}
+                        </h3>
+
+                        <!-- Price Section -->
+                        <div class="flex items-baseline gap-2 mb-2">
+                            <span class="text-[20px] font-bold text-[#111827]">${formatINR(product.price)}</span>
+                            ${product.oldPrice ? `<span class="text-[14px] text-[#687280] line-through">${formatINR(product.oldPrice)}</span>` : ''}
+                        </div>
+
+                        <!-- Rating Section -->
+                        <div class="flex items-center gap-1.5 text-xs mb-4">
+                            <div class="flex items-center text-[#F59E0B]">
+                                <i data-lucide="star" class="w-3.5 h-3.5 fill-[#F59E0B]"></i>
+                                <span class="font-bold ml-1 text-[#111827] text-sm">${product.rating}</span>
+                            </div>
+                            <span class="text-[#687280]">(${product.reviewsCount})</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Button -->
+                    <button 
+                        onclick="addToCart('${product.name}')"
+                        class="w-full bg-[#2563EB] hover:bg-blue-700 active:scale-[0.98] text-white text-sm font-medium py-2.5 px-4 rounded-xl shadow-sm transition-all flex items-center justify-center gap-2"
+                    >
+                        <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+                        <span>Add to Cart</span>
+                    </button>
+                </div>
+                `;
+            }).join('');
+
+            // Re-initialize Lucide Icons after DOM update
+            lucide.createIcons();
+        }
+
+        function getFilteredProducts() {
+            // Get search query
+            const searchVal = (document.getElementById('search-input').value || document.getElementById('mobile-search-input').value).toLowerCase().trim();
+
+            // Get selected categories
+            const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(cb => cb.value);
+
+            // Get selected prices
+            const selectedPrices = Array.from(document.querySelectorAll('input[name="price"]:checked')).map(cb => cb.value);
+
+            // Get selected brands
+            const selectedBrands = Array.from(document.querySelectorAll('input[name="brand"]:checked')).map(cb => cb.value);
+
+            return productsData.filter(product => {
+                // Search match
+                if (searchVal && !product.name.toLowerCase().includes(searchVal) && !product.brand.toLowerCase().includes(searchVal)) {
+                    return false;
+                }
+
+                // Category match
+                if (selectedCategories.length > 0 && !selectedCategories.includes(product.category)) {
+                    return false;
+                }
+
+                // Brand match
+                if (selectedBrands.length > 0 && !selectedBrands.includes(product.brand)) {
+                    return false;
+                }
+
+                // Price range match
+                if (selectedPrices.length > 0) {
+                    const priceMatches = selectedPrices.some(range => {
+                        if (range === '0-25000') return product.price <= 25000;
+                        if (range === '25000-50000') return product.price > 25000 && product.price <= 50000;
+                        if (range === '50000-75000') return product.price > 50000 && product.price <= 75000;
+                        if (range === '75000-plus') return product.price > 75000;
+                        return false;
+                    });
+                    if (!priceMatches) return false;
+                }
+
+                return true;
+            });
+        }
+
+        function applyFilters() {
+            let filtered = getFilteredProducts();
+            
+            // Apply sorting
+            const sortVal = document.getElementById('sort-select').value;
+            if (sortVal === 'price-low') {
+                filtered.sort((a, b) => a.price - b.price);
+            } else if (sortVal === 'price-high') {
+                filtered.sort((a, b) => b.price - a.price);
+            } else if (sortVal === 'rating') {
+                filtered.sort((a, b) => b.rating - a.rating);
+            } else if (sortVal === 'popularity') {
+                filtered.sort((a, b) => b.popularity - a.popularity);
+            }
+
+            renderProducts(filtered);
+        }
+
+        function handleSort() {
+            applyFilters();
+        }
+
+        function handleSearch(isMobile = false) {
+            // Sync desktop and mobile search inputs
+            if (isMobile) {
+                document.getElementById('search-input').value = document.getElementById('mobile-search-input').value;
+            } else {
+                document.getElementById('mobile-search-input').value = document.getElementById('search-input').value;
+            }
+            applyFilters();
+        }
+
+        function resetFilters() {
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.checked = (cb.value === 'Laptops');
+            });
+            document.getElementById('search-input').value = '';
+            document.getElementById('mobile-search-input').value = '';
+            document.getElementById('sort-select').value = 'popularity';
+            applyFilters();
+        }
+
+        function addToCart(productName) {
+            cartCount++;
+            document.getElementById('cart-badge').textContent = cartCount;
+            showToast(`Added "${productName}" to cart!`);
+        }
+
+        function toggleWishlist(productId) {
+            if (wishlistedItems.has(productId)) {
+                wishlistedItems.delete(productId);
+                showToast(`Removed item from wishlist.`);
+            } else {
+                wishlistedItems.add(productId);
+                showToast(`Saved to wishlist!`);
+            }
+            applyFilters();
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast-slide bg-[#111827] text-white text-xs font-medium px-4 py-3 rounded-xl shadow-xl flex items-center gap-2 pointer-events-auto border border-gray-800';
+            toast.innerHTML = `
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-[#10B981]"></i>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
+        // Mobile Filter Sidebar Toggle
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('sidebar-container');
+            sidebar.classList.toggle('hidden');
+        }
+
+        // Mobile Search Toggle
+        function toggleMobileSearch() {
+            const searchBar = document.getElementById('mobile-search-bar');
+            searchBar.classList.toggle('hidden');
+        }
+
+        // Initialize application on DOM load
+        window.onload = function() {
+            applyFilters();
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>

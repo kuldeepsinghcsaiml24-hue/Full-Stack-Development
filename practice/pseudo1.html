@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #box1,#box2,#box3{
+            width:100px;
+            height:100px;
+            margin:10px;
+            background-color: grey;
+        }
+        #box1:hover,#box2:hover,#box3:hover{
+            box-shadow:15px 15px 20px rebeccapurple;
+        }
+        #box1:focus{
+            background-color: grey;
+            outline-width: 3px;
+            outline-color: red;
+        }
+        #box2:focus{
+            background-color: yellow;
+            outline-width: 3px;
+            outline-color: lightblue;
+        }
+        #box3:focus{
+            background-color: rgba(111, 111, 216, 0.812);
+            outline-width: 3px;
+            outline-color: lightblue;
+        }
+        #box1:active,#box2:active,#box:active{
+            box-shadow: 0 0 0 transparent;
+            background-color: lightgray;
+        }
+        a:link{
+            color:red;
+            text-decoration:none;
+        }
+        a:visited{
+            color:pink;
+        }
+    </style>
+</head>
+<body>
+    <button id="box1">1</button>
+    <button id="box2">2</button>
+    <button id="box3">3</button>
+
+    <a href="#1">Link</a>
+    <a href="#">Link</a>
+
+</body>
+</html>

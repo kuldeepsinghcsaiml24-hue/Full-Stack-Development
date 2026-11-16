@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Logo</title>
+    <style>
+        *{
+            background-color: rgb(156, 156, 213);
+            color:white
+        }
+        header{
+            font-family:serif;
+        }
+        .logo{
+            border-radius:50%;
+            border:1px solid black;
+            width:200px;
+            height:200px;
+            margin:2px;
+            padding:2px 2px; 
+        }
+        .profile{
+            display:flex;
+            flex-direction:row;
+            justify-content:flex-start;
+        }
+        h1{
+            padding:50px;
+        }
+        h4{
+            display:flex;
+            flex-direction: row;
+            justify-content: right;
+        }
+        span{
+            font-size:20px;
+            font-style:italic;
+            display: block;
+        }
+        main{
+            display:flex;
+            flex-direction:column;
+            gap:1em;
+            margin:2em;
+        }
+        .card1{
+            display:flex;
+            flex-direction:row;
+            gap:2em;
+        }
+        .card2{
+            display:flex;
+            flex-direction:row;
+            gap:2em;
+        }
+        .sales{
+            border:2px solid black;
+            text-decoration:underline;
+            height:200px;
+            width:300px;
+            text-align:center;
+            border-radius:10px;
+            box-shadow: 4px 4px 4px rgba(11, 98, 210, 0.492);
+        }
+        .sales>img{
+            width:300px;
+            height:180px;
+            border:2px solid white;
+        }
+        .market{
+            border:2px solid black;
+            text-decoration:underline;
+            height:200px;
+            width: 300px;
+            text-align:center;
+            border-radius:10px;
+            box-shadow: 4px 4px 4px rgba(11, 98, 210, 0.492);
+        }
+        .profit{
+            border:2px solid black;
+            text-decoration:underline;
+            height:200px;
+            width: 300px;
+            text-align:center;
+            border-radius:10px;
+            box-shadow: 4px 4px 4px rgba(11, 98, 210, 0.492);
+        }
+        .clients{
+            border:2px solid black;
+            text-decoration:underline;
+            height:200px;
+            width:300px;
+            text-align:center;
+            border-radius:10px;
+            box-shadow: 4px 4px 4px rgba(11, 98, 210, 0.492);
+        }
+        
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="profile">
+        <img src="https://th.bing.com/th/id/OIP.Sko8CQSOZhYy3u_kQB6J3QHaHa?w=192&h=193&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" class="logo">
+        <h1>Ravi Sharma<span>Sales executive from Banimo Branch</span></h1>
+        </div>
+    </header>
+    <main>
+        <div class="card1">
+        <section class="sales">
+            <div>Sales</div>
+            <img src="https://th.bing.com/th/id/OIP.RCDL7kfg6rhkFiP8J7fGsAHaEU?w=279&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3">
+        </section>
+        <section class="market">
+            <div>market</div>
+        </section>
+        </div>
+
+        <div class="card2">
+        <section class="profit">
+            <div>profit</div>
+        </section>
+        <section class="clients">
+            <div>clients</div>
+        </section>
+        </div>
+    </main>
+
+    
+</body>
+</html>

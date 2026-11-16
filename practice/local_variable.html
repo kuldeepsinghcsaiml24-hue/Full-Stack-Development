@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Container Query Example</title>
+    <style>
+
+        .container {
+            container-type: inline-size;
+            width: 100%;
+        }
+
+        button {
+            background-color: black;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        @container (width > 500px) {
+            button {
+                background-color: rgb(241, 105, 105);
+                color: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- The button must be inside a container element -->
+    <div class="container">
+        <button class="btn-submit btn">Click Me!!</button>
+    </div>
+</body>
+</html>

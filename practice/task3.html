@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Minimal Checkout</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f9f9f9; }
+    .checkout-box { max-width: 500px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .summary-row { display: flex; justify-content: space-between; margin-top: 8px; }
+    .total { font-weight: bold; font-size: 1.1em; border-top: 1px solid #ccc; padding-top: 8px; margin-top: 12px; }
+    button { cursor: pointer; padding: 2px 8px; }
+  </style>
+</head>
+<body>
+
+<div class="checkout-box">
+  <h2>Cart</h2>
+  <div id="cart"></div>
+
+  <h2>Suggestions</h2>
+  <div id="suggestions"></div>
+
+  <h2>Summary</h2>
+  <input type="text" id="coupon" placeholder="Code (e.g. SAVE10)" style="width: 60%;">
+  <button onclick="applyCoupon()">Apply</button>
+  
+  <div class="summary-row"><span>Subtotal:</span><span id="subtotal">$0.00</span></div>
+  <div class="summary-row"><span>Discount:</span><span id="discount">-$0.00</span></div>
+  <div class="summary-row total"><span>Total:</span><span id="total">$0.00</span></div>
+</div>
+
+<script>
+let cart = [
+  { id: 1, name: "Headphones", price: 100, qty: 1 },
+  { id: 2, name: "Keyboard", price: 50, qty: 2 }
+];
+
+let suggested = [
+  { id: 101, name: "Mousepad", price: 15 }
+];
+
+let discountRate = 0;
+
+function update() {
+  const cartEl = document.getElementById("cart");
+  cartEl.innerHTML = cart.length ? "" : "<p>Cart is empty</p>";
+  
+  let subtotal = 0;
+  cart.forEach(item => {
+    // Nullish coalescing (??) fallback checks
+    const qty = item.qty ?? 1;
+    const price = item.price ?? 0;
+    subtotal += price * qty;
+
+    cartEl.innerHTML += `
+      <div class="item">
+        <span>${item.name ?? 'Item'} - $${price}</span>
+        <div>
+          <button onclick="changeQty(${item.id}, -1)">-</button>
+          <span>${qty}</span>
+          <button onclick="changeQty(${item.id}, 1)">+</button>
+          <button onclick="removeCartItem(${item.id})">x</button>
+        </div>
+      </div>`;
+  });
+
+  // Render Suggested
+  const sugEl = document.getElementById("suggestions");
+  sugEl.innerHTML = suggested.length ? "" : "<p>No suggestions</p>";
+  suggested.forEach(item => {
+    sugEl.innerHTML += `
+      <div class="item">
+        <span>${item.name ?? 'Item'} - $${item.price ?? 0}</span>
+        <button onclick="addSuggested(${item.id})">Add</button>
+      </div>`;
+  });
+
+  const discount = subtotal * (discountRate ?? 0);
+  const total = subtotal - discount;
+
+
+  document.getElementById("subtotal").innerText = `$${subtotal.toFixed(2)}`;
+  document.getElementById("discount").innerText = `-$${discount.toFixed(2)}`;
+  document.getElementById("total").innerText = `$${total.toFixed(2)}`;
+}
+
+function changeQty(id, delta) {
+  const item = cart.find(i => i.id === id);
+  if (item) {
+    item.qty = (item.qty ?? 1) + delta;
+    if (item.qty <= 0) removeCartItem(id);
+    else update();
+  }
+}
+
+function removeCartItem(id) {
+  cart = cart.filter(i => i.id !== id);
+  update();
+}
+
+function addSuggested(id) {
+  const index = suggested.findIndex(i => i.id === id);
+  if (index > -1) {
+    const [item] = suggested.splice(index, 1);
+    cart.push({ ...item, qty: 1 });
+    update();
+  }
+}
+
+function applyCoupon() {
+  const coupons = { "SAVE10": 0.1, "SAVE20": 0.2 };
+  const code = document.getElementById("coupon").value.trim().toUpperCase();
+  
+  // Nullish coalescing (??) sets 0 discount rate if code doesn't exist
+  discountRate = coupons[code] ?? 0;
+  update();
+}
+
+// Initial render
+update();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        button{
+            border-radius: 0px;
+            border:1px solid black;
+            background: black;
+            color:white;
+        }
+        button:active{
+            background-color: yellow;
+            color: black;
+        }
+        button:focus{
+            background-color: grey;
+            box-shadow: 3px 3px 5px grey;
+        }
+        a{
+            color:white;
+            background-color: black;
+        }
+        a:hover{
+            color:pink;
+        }
+        a:link{
+            color:red;
+        }
+        a:active {
+            color:aqua;
+        }
+        input:checked{
+            accent-color: red;
+        }
+        input:not(:checked){
+            box-shadow: 0px opx 5px black;
+        }
+        
+        
+    </style>
+</head>
+<body>
+    <input type="checkbox" checked/>
+    <input type="checkbox">
+    <button>Click Me!!</button><br>
+    <br>
+    <a href="##">Link Click</a>
+
+</body>
+</html>
+ 

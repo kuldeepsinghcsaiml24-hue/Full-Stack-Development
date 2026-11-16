@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SaaS Landing Page</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: #F8FAFC;
+            color: #475569;
+        }
+        .navbar {
+            height: 72px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        .logo {
+            color: #0F172A;
+        }
+        .links {
+            display: flex;
+            gap: 25px;
+        }
+        .links a {
+            text-decoration: none;
+            color: #475569;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .menu {
+            display: none;
+        }
+        .hero {
+            min-height: 520px;
+            max-width: 1200px;
+            margin: auto;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+        }
+        .hero-text {
+            max-width: 650px;
+        }
+        h1 {
+            font-size: 48px;
+            line-height: 1.1;
+            color: #0F172A;
+            margin-bottom: 20px;
+        }
+        .hero p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        .buttons {
+            margin-top: 32px;
+            display: flex;
+            gap: 15px;
+        }
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            background: #4F46E5;
+            color: white;
+            cursor: pointer;
+        }
+        .features {
+            max-width: 1200px;
+            margin: auto;
+            padding: 24px;
+        }
+        .features h2 {
+            text-align: center;
+            font-size: 32px;
+            color: #0F172A;
+            margin-bottom: 48px;
+        }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .card {
+            background: white;
+            padding: 24px;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+        }
+        .card h3 {
+            color: #0F172A;
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+        .card p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        @media (max-width: 1023px) {
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 639px) {
+            .links {
+                display: none;
+            }
+
+            .menu {
+                display: block;
+                font-size: 24px;
+            }
+
+            .hero {
+                text-align: center;
+            }
+
+            .hero-text {
+                margin: auto;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <h2 class="logo">SaaSify</h2>
+
+        <div class="links">
+            <a href="#">Home</a>
+            <a href="#features">Features</a>
+            <a href="#">Pricing</a>
+            <a href="#">Contact</a>
+        </div>
+
+        <div class="menu">☰</div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Build Better Products Faster</h1>
+
+            <p>
+                Simple and powerful tools that help your team
+                build, launch and grow better products.
+            </p>
+
+            <div class="buttons">
+                <button>Get Started</button>
+                <button>Learn More</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <h2>Our Features</h2>
+
+        <div class="cards">
+            <div class="card">
+                <h3>Fast</h3>
+                <p>Build and launch your products quickly.</p>
+            </div>
+
+            <div class="card">
+                <h3>Team Work</h3>
+                <p>Work together with your team easily.</p>
+            </div>
+
+            <div class="card">
+                <h3>Secure</h3>
+                <p>Keep your data safe and protected.</p>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

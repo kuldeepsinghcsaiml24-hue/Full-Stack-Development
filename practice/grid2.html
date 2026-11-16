@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        body{
+            width:100vw;
+            height:100vh;
+        }
+        .container{
+            height:100%;
+            width:100%;
+            background-color: brown;
+            display:grid;
+            border:1px solid black;
+            padding:4rem;
+            gap:1rem;
+            grid-template-rows:repeat(2,1fr);
+            grid-template-columns: repeat(3,1fr);
+        }
+        .items{
+            background-color:bisque;
+            gap:1rem;
+        }
+        .header{
+            grid-column-start:1;
+            grid-column-end:4;
+            height:50px;
+            border:1px solid black;
+            border-radius:8px;
+            box-shadow:2px 2px blue;
+            display:flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>cotora</h1>
+    <div class="items header">
+        <div>Home</div>
+        <div>About</div>
+        <div>contact</div>
+        <div>call</div>
+    </div>
+    <div class="items">2</div>
+    <div class="items">3</div>
+    <div class="items">4</div>
+    <div class="items">5</div>
+    <div class="items">6</div>
+    </div>
+</body>
+</html>

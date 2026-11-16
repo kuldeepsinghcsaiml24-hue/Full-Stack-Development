@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Shoes Slider</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+        }
+
+        .slider {
+            width: 100vw;
+            height: 100vh;
+
+            display: flex;
+
+            overflow-x: scroll;
+            overflow-y: hidden;
+
+            scrollbar-width: none;
+
+            scroll-snap-type: x mandatory;
+        }
+
+        .slider::-webkit-scrollbar {
+            display: none;
+        }
+
+        .box {
+            min-width: 100vw;
+            height: 100vh;
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            scroll-snap-align: start;
+
+            flex-shrink: 0;
+        }
+
+        .item {
+            min-width: 100vw;
+            height: 100vh;
+
+            font-size: 50px;
+            color: white;
+
+            -webkit-text-stroke: 2px white;
+
+            text-align: center;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            flex-shrink: 0;
+
+            scroll-snap-align: start;
+        }
+
+        #box1 {
+            background-image: url("https://images.pexels.com/photos/15475641/pexels-photo-15475641.jpeg");
+        }
+
+        #box2 {
+            background-image: url("https://images.pexels.com/photos/8473534/pexels-photo-8473534.jpeg");
+        }
+
+        #box3 {
+            background-image: url("https://images.pexels.com/photos/11324547/pexels-photo-11324547.jpeg");
+        }
+
+        #box4 {
+            background-image: url("https://images.pexels.com/photos/4695175/pexels-photo-4695175.jpeg");
+        }
+
+        #box5 {
+            background-image: url("https://images.pexels.com/photos/14337851/pexels-photo-14337851.jpeg");
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="slider">
+
+        <div class="box" id="box1">
+            <div class="item">
+                SHOES 1
+            </div>
+        </div>
+
+        <div class="box" id="box2">
+            <div class="item">
+                SHOES 2
+            </div>
+        </div>
+
+        <div class="box" id="box3">
+            <div class="item">
+                SHOES 3
+            </div>
+        </div>
+
+        <div class="box" id="box4">
+            <div class="item">
+                SHOES 4
+            </div>
+        </div>
+
+        <div class="box" id="box5">
+            <div class="item">
+                SHOES 5
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

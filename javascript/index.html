@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout Page</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f4f6f8;
+      color: #333;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+
+    /* Product Cart */
+    .cart-item, .suggested-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .item-details {
+      flex: 2;
+    }
+
+    .item-title {
+      font-weight: 600;
+      display: block;
+    }
+
+    .item-price {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 15px;
+    }
+
+    .quantity-controls button {
+      width: 28px;
+      height: 28px;
+      border: 1px solid #ccc;
+      background: #f8f9fa;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .quantity-controls button:hover {
+      background: #e2e6ea;
+    }
+
+    .btn-remove, .btn-add {
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .btn-remove {
+      background-color: #ff4d4f;
+      color: white;
+    }
+
+    .btn-remove:hover {
+      background-color: #d9363e;
+    }
+
+    .btn-add {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .btn-add:hover {
+      background-color: #218838;
+    }
+
+    /* Summary Section */
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+
+    .summary-row.total {
+      font-weight: bold;
+      font-size: 1.2rem;
+      border-top: 2px solid #eee;
+      padding-top: 12px;
+      margin-top: 12px;
+    }
+
+    .discount-container {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .discount-container input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .discount-container button {
+      padding: 8px 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .discount-container button:hover {
+      background-color: #0056b3;
+    }
+
+    .message {
+      font-size: 0.85rem;
+      margin-top: -10px;
+      margin-bottom: 10px;
+    }
+
+    .message.success { color: #28a745; }
+    .message.error { color: #dc3545; }
+
+    .btn-checkout {
+      width: 100%;
+      padding: 12px;
+      background-color: #17a2b8;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-checkout:hover {
+      background-color: #138496;
+    }
+
+    .empty-msg {
+      color: #888;
+      font-style: italic;
+      text-align: center;
+      padding: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Left Column: Products and Upsells -->
+    <div class="left-column">
+      <div class="card">
+        <h2>Your Shopping Cart</h2>
+        <div id="cart-list"></div>
+      </div>
+
+      <div class="card">
+        <h2>Suggested Products</h2>
+        <div id="suggested-list"></div>
+      </div>
+    </div>
+
+    <!-- Right Column: Checkout Summary -->
+    <div class="right-column">
+      <div class="card">
+        <h2>Order Summary</h2>
+        
+        <div class="discount-container">
+          <input type="text" id="coupon-input" placeholder="Coupon Code (e.g., SAVE10)">
+          <button id="apply-coupon-btn">Apply</button>
+        </div>
+        <div id="coupon-message" class="message"></div>
+
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="subtotal-val">$0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>Discount</span>
+          <span id="discount-val">-$0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>Tax (10%)</span>
+          <span id="tax-val">$0.00</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total</span>
+          <span id="total-val">$0.00</span>
+        </div>
+
+        <button class="btn-checkout">Proceed to Checkout</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sticky Test</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #1a1a1a;
+    }
+
+    #test {
+      width: 100vw;
+      min-height: 300vh; /* Provides scrollable room for the sticky effect */
+      font-size: 30px;
+      color: white;
+      background-color: #2a2a2a;
+    }
+
+    #test > div {
+      display: block;
+      position: sticky;
+      top: 100px;
+      width: 100vw;
+      height: 100vh;
+      background-color: #007acc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #test>div:nth-child(1){
+        background-color: blue;
+    }
+    #test>div:nth-child(2){
+        background-color: blue;
+    }
+    #test>div:nth-child(3){
+        background-color: blue;
+    }
+    #test>div:nth-child(4){
+        background-color: blue;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="w-full h-fit text-xl text-white">
+    <div class="sticky w-screen h-screen top-[0px]bg-yellow-100>1</div>
+    <div class="sticky w-screen h-screen top-[0px]bg-yellow-100>2</div>
+    <div class="sticky w-screen h-screen top-[0px]bg-yellow-100>3</div>
+    <div class="sticky w-screen h-screen top-[0px]bg-yellow-100>4</div>
+    <div class="sticky w-screen h-screen top-[0px]bg-yellow-100>5</div>
+  </div>
+
+</body>
+</html>

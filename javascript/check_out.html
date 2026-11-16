@@ -1,0 +1,30 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currying Checkout</title>
+</head>
+
+<body>
+
+    <h1>Checkout Page</h1>
+    <h3>Product: Laptop</h3>
+    <p>Price: ₹50,000</p>
+    <label>Quantity:</label>
+    <input type="number" id="quantity" value="1" min="1">
+    <br><br>
+    <label>Discount (%):</label>
+    <input type="number" id="discount" value="10" min="0" max="100">
+
+    <hr>
+
+    <h2>Order Summary</h2>
+    <p>Subtotal: ₹<span id="subtotal">0</span></p>
+    <p>Discount: ₹<span id="discountAmount">0</span></p>
+    <h2>Total: ₹<span id="total">0</span></h2>
+    <script src="check_out.js"></script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gradient Showcase</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: #0f172a;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            padding: 40px;
+            margin: 0;
+        }
+        .items{
+            height: 80px;
+            width: 250px;
+            padding: 12px;
+            background: #1e293b;
+            border: 1px solid #64748b;
+            border-radius: 12px;
+            box-sizing: border-box;
+        }
+        .progress{
+           height: 100%;
+           width: 80%;
+           border-radius: 50px;
+           background: linear-gradient(to right, #22c55e, #86efac);
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        #grad1 {
+            height: 32px;
+            width: 250px;
+            background: linear-gradient(
+                to right,
+                red 0%,
+                white 75%,
+                #334155 75%,
+                #334155 100%
+            );
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #111827;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #ff512f, #dd2476);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        #grad2 {
+            height: 300px;
+            width: 300px;
+            border-radius: 50%;
+            background-image: radial-gradient(
+                circle at center,
+                #ffffff 0%,
+                #ffd6d6 12%,
+                #ff8a8a 35%,
+                #d62828 65%,
+                #5c0000 100%
+            );
+            box-shadow: 
+                0 0 25px rgba(255, 138, 138, 0.45),
+                0 0 50px rgba(214, 40, 40, 0.25);
+        }
+
+        .gradient-text2 {
+            background: linear-gradient(to right, #ffb3b3, #8b0000);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        #grad3 {
+            height: 300px;
+            width: 300px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #87ceeb 0deg,
+                #00008b 270deg,
+                #334155 270deg,
+                #334155 360deg
+            );
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        #grad3::before {
+            content: "75%";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background-color: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #87ceeb;
+        }
+
+        .gradient-text3 {
+            background: conic-gradient(#87ceeb, #00008b, #87ceeb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="gradient-text">Linear Gradient</h1>
+        <div id="grad1">Players</div>
+    </div>
+
+    <div class="container">
+        <h1 class="gradient-text2">Radial Gradient</h1>
+        <div id="grad2"></div>
+    </div>
+
+    <div class="container">
+        <h1 class="gradient-text3">Conic Gradient</h1>
+        <div id="grad3"></div>
+    </div>
+    <div class="items">
+        <div class="progress"></div>
+    </div>
+
+</body>
+</html>

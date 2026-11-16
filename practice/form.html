@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /*
+         :enabled
+         :disabled
+         :valid
+         :invalid
+         :required
+         :optional
+         :in-range
+         :out-of-range
+         :placeholder-shown
+         :checked
+         :read-only dys
+         :read-wite dys
+        */
+        input{
+            margin:3px;
+            border-width: 0 0 2px 0;
+            border-color:blue;
+        }
+        input:required{
+            font-family: Arial;
+        }
+        input:optional{
+            font-family:italic;
+        }
+        input:valid{
+            color:green;
+        }
+        input:invalid{
+            color:red;
+        }
+        input:in-range{
+            font-weight: 900;
+        }
+        input:out-of-range{
+            font-size: 30px;
+        }
+        input:disabled{
+            border-width:0px;
+            background-color:grey !important;
+            color:black;
+        }
+        input:enabled{
+            color:black;
+            background-color: lightgrey;
+        }
+        input:checked{
+            box-shadow: 3px 3px 0 black;
+        }
+        input:placeholder-shown{
+            font-size: 20px;
+        }
+        input:read-only{
+            background-color: transparent;
+            border-width: 0px;
+        }
+        input:read-write{
+            box-shadow: 3px 3px 0 black;
+        }
+        li:nth-child(even){
+            color:red;
+        }
+    </style>
+</head>
+<body>
+    <form>
+        <ul>
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+        </ul>
+        <input type="text" value="Mr." style="width:30px" readonly/><br/><br/>
+        <input type="text" placeholder="First Name" required/><br/><br/>
+        <input type="text" placeholder="Middle Name"optional /><br/><br/>
+        <input type="text" placeholder="Last Name" required/><br/><br/>
+        <input type="email" placeholder="Email" required/><br/><br/>
+        <input type="number" placeholder="Age" min="18" max="150" required/><br/><br/>
+        <input type="phone" placeholder="Mobile" pattern="[0-9]{10}" maxlength="10" required/><br/><br/>
+        <input type="checkbox" /><br/><br/>
+        <input type="text" value="Mathura" disabled/><br/><br/>
+    </form>
+</body>
+</html>
